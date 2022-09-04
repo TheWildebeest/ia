@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { PanelComponent } from './panel/panel.component';
+import { PanelComponent } from './components/panel/panel.component';
 
 @NgModule({
   declarations: [
