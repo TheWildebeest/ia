@@ -1,0 +1,17 @@
+<main class="p-5">
+  <ng-container *ngIf="data else loading">
+    <ngb-accordion
+      [animation]="true"
+      [closeOthers]="true"
+      activeIds="ngb-panel-0"
+      type="dark">
+
+    </ngb-accordion>
+  </ng-container>
+  <ng-template #loading>
+    <div class="text-center">
+      <div class="spinner-border display-7" style="width: 6rem; height: 6rem;" role="status"></div>
+      <div class="my-2"><strong>Loading...</strong></div>
+    </div>
+  </ng-template>
+</main>
