@@ -1,0 +1,6 @@
+<h2>{{ data.title }}</h2>
+<h3>{{ data.subTitle }}</h3>
+<p>{{ data.description }}</p>
+<p><a [attr.href]="data.url" target="_blank">Learn more</a></p>
+<hr class="my-2">
+{{ data.chart | json }}
