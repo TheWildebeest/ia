@@ -2,10 +2,24 @@
   <ng-container *ngIf="data else loading">
     <ngb-accordion
       [animation]="true"
-      [closeOthers]="true"
-      activeIds="ngb-panel-0"
-      type="dark">
-
+      [closeOthers]="true">
+      <ng-container *ngFor="let item of data, let first = first">
+        <ngb-panel>
+          <ng-template ngbPanelTitle>
+            <div class="row w-100">
+              <span class="col">
+                <span>{{ item.date }}</span>
+                &NonBreakingSpace;&NonBreakingSpace;&NonBreakingSpace;
+                <span *ngIf="first" class="small">★ NEW! ★</span>
+              </span>
+              <span class="col-9">{{ item.title }}</span>
+            </div>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <app-panel [data]="item"></app-panel>
+          </ng-template>
+        </ngb-panel>
+      </ng-container>
     </ngb-accordion>
   </ng-container>
   <ng-template #loading>
