@@ -10,6 +10,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PanelComponent } from './components/panel/panel.component';
+import { ChartComponent } from './components/chart/chart.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { PanelComponent } from './components/panel/panel.component';
     FooterComponent,
     DashboardComponent,
     PanelComponent,
+    ChartComponent,
   ],
   imports: [
     BrowserModule,
