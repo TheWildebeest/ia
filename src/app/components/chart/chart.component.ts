@@ -17,21 +17,24 @@ export class ChartComponent implements OnInit, AfterViewInit {
   @Input() height = 400;
   @Input() margin = 50;
 
+  public chartReady = false;
+
   constructor() { }
 
   ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-    setTimeout(
-      () => {
-        if (this.graphContainer) {
-          this._initGraph();
-        }
-      }, 100
-    );
+    setTimeout(() => this._initGraph(), 100);
   }
 
   private _initGraph(): void {
+
+    // Ensure the view is available for access. If not, try again later
+    if (!this.graphContainer) {
+      setTimeout(() => this._initGraph(), 500);
+      return;
+    }
+
     // Set the dimensions and margins of the graph
     const outerHeight = this.height;
     const innerHeight = this.height - 2 * this.margin;
@@ -74,5 +77,8 @@ export class ChartComponent implements OnInit, AfterViewInit {
         .x((d) => x(d.x))
         .y((d) => y(d.y))
       );
+
+    // Set ready flag
+    this.chartReady = true;
   }
 }
