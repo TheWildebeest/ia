@@ -38,7 +38,7 @@ Make a page, single page app or series of pages that you feel best displays the 
 |date|`string` (YYYY-DD-MM)|
 |url|`string`|
 |description|`string`|
-|chart|`ChartXY`|
+|chart|`ChartXY[]`|
 ---
 |*type `ChartXY`*||
 |---|---|
