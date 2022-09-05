@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Host, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import * as d3 from 'd3';
 import { ChartData, ChartXY } from 'src/models';
 
@@ -13,15 +13,21 @@ export class ChartComponent implements OnInit, AfterViewInit {
 
   @Input() chartData: ChartData = [{ x: 0, y: 0}];
   @Input() id: string;
-  @Input() width = 750;
-  @Input() height = 400;
   @Input() margin = 50;
 
   public chartReady = false;
+  public svg: any;
 
-  constructor() { }
+  constructor(
+    private renderer2: Renderer2
+  ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.renderer2.listen(
+      'window',
+      'resize',
+      () => this._initGraph());
+  }
 
   ngAfterViewInit(): void {
     setTimeout(() => this._initGraph(), 100);
@@ -35,28 +41,29 @@ export class ChartComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    // Set the dimensions and margins of the graph
-    const outerHeight = this.height;
-    const innerHeight = this.height - 2 * this.margin;
+    // If the svg is already in the DOM, destroy it
+    this.svg = d3.select('#' + this.id + '> svg').remove();
 
-    const outerWidth = this.width;
-    const innerWidth = this.width - 2 * this.margin;
-    // const width = this.width - this.margin - this.margin;
-    // const height = this.height - this.margin - this.margin;
+    // Set the dimensions and margins of the graph
+    const outerHeight = this.graphContainer.nativeElement.offsetWidth * 0.618;
+    const innerHeight = outerHeight - 2 * this.margin;
+
+    const outerWidth = this.graphContainer.nativeElement.offsetWidth;
+    const innerWidth = outerWidth - 2 * this.margin;
 
     // Append the svg object to the body of the page
-    const svg = d3.select('#' + this.id)
+    this.svg = d3.select('#' + this.id)
       .append('svg')
         .attr('width', outerWidth)
         .attr('height', outerHeight)
       .append('g')
         .attr('transform', 'translate(' + this.margin + ',' + this.margin + ')');
 
-    // Add X axis --> it is a date format
+    // Add X axis
     const x = d3.scaleTime()
       .domain(d3.extent(this.chartData, (d) => d.x))
       .range([ 0, innerWidth ]);
-    svg.append('g')
+    this.svg.append('g')
       .attr('transform', 'translate(0,' + innerHeight + ')')
       .call(d3.axisBottom(x));
 
@@ -64,15 +71,15 @@ export class ChartComponent implements OnInit, AfterViewInit {
     const y = d3.scaleLinear()
       .domain([0, d3.max(this.chartData, (d) => +d.y)])
       .range([ innerHeight, 0 ]);
-    svg.append('g')
+    this.svg.append('g')
       .call(d3.axisLeft(y));
 
     // Add the line
-    svg.append('path')
+    this.svg.append('path')
       .datum(this.chartData)
       .attr('fill', 'none')
       .attr('stroke', 'steelblue')
-      .attr('stroke-width', 1.5)
+      .attr('stroke-width', 3)
       .attr('d', d3.line<ChartXY>()
         .x((d) => x(d.x))
         .y((d) => y(d.y))
