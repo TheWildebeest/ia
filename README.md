@@ -1,12 +1,25 @@
 # Interactive advisors tech test
 
-#### **Applicant**:
+### Applicant:
 
 David Wildman
 
-#### **Spec**:
+### Spec:
 
 Make a page, single page app or series of pages that you feel best displays the data to a potential user.
+
+### Running the project locally
+#### *Requirements: Node, Npm, Angular CLI*
+#### **Instructions**:
+
+- Open a terminal
+- Execute `git clone https://github.com/TheWildebeest/ia.git` to make a copy of the repository locally.
+- Execute `ls` to confirm the folder 'data-visualisation' exists.
+- Execute `cd ia` to move into the project directory.
+- Execute `npm install` to install all project dependencies.
+- Once finished, use the angular command `ng serve` to boot up a local dev server.
+- Navigate to http://localhost:4200/ in your browser.
+- Any problems, drop me a line: david.m.wildman@gmail.com
 
 #### **Packages used**:
 - **D3** to render chart data
