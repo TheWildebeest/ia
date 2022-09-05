@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { ChartData, Post } from 'src/models';
 import { DataService } from '../../services/data.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { DataService } from '../../services/data.service';
 export class DashboardComponent implements OnInit, OnDestroy {
 
   private subscription = new Subscription();
-  public data: any;
+  public data: Post[];
 
   constructor(
     private dataService: DataService
@@ -21,10 +22,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const dataSubscription = this.dataService.getData()
       .pipe(
         tap(console.log),
-        map(response => response.data)
+        map(data => data.map((item: any, index: number) => {
+          return { ...item, id: index };
+        }))
       )
     .subscribe((data) => {
       this.data = data;
+      console.log(this.data);
     });
     this.subscription.add(dataSubscription);
   }

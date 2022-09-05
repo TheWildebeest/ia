@@ -25,73 +25,54 @@ export class ChartComponent implements OnInit, AfterViewInit {
     setTimeout(
       () => {
         if (this.graphContainer) {
-          this.setUpGraph();
+          this._initGraph();
         }
       }, 100
     );
   }
 
-  private setUpGraph(): any {
-    // Create SVG and padding for the chart
+  private _initGraph(): void {
+    // Set the dimensions and margins of the graph
+    const outerHeight = this.height;
+    const innerHeight = this.height - 2 * this.margin;
 
-    const svg = d3
-      .select('#' + this.id)
+    const outerWidth = this.width;
+    const innerWidth = this.width - 2 * this.margin;
+    // const width = this.width - this.margin - this.margin;
+    // const height = this.height - this.margin - this.margin;
+
+    // Append the svg object to the body of the page
+    const svg = d3.select('#' + this.id)
       .append('svg')
-        .attr('height', 300)
-        .attr('width', 600);
-
-    const margin = { top: 0, bottom: 20, left: 30, right: 20 };
-    const chart = svg.append('g').attr('transform', `translate(${margin.left},0)`).attr('id', 'chart');
-    const width = +svg.attr('width') - margin.left - margin.right;
-    const height = +svg.attr('height') - margin.top - margin.bottom;
-    const grp = chart
+        .attr('width', outerWidth)
+        .attr('height', outerHeight)
       .append('g')
-        .attr('transform', `translate(-${margin.left},-${margin.top})`)
-        .attr('width', 700)
-        .attr('height', 450)
-        .attr('id', 'grp');
+        .attr('transform', 'translate(' + this.margin + ',' + this.margin + ')');
 
-    // Create scales
+    // Add X axis --> it is a date format
+    const x = d3.scaleTime()
+      .domain(d3.extent(this.chartData, (d) => d.x))
+      .range([ 0, innerWidth ]);
+    svg.append('g')
+      .attr('transform', 'translate(0,' + innerHeight + ')')
+      .call(d3.axisBottom(x));
 
-    // -- X scale
-    const xScale = d3
-      .scaleLinear()
-      .range([0, width])
-      .domain(d3.extent(this.chartData, dataPoint => dataPoint.x));
+    // Add Y axis
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(this.chartData, (d) => +d.y)])
+      .range([ innerHeight, 0 ]);
+    svg.append('g')
+      .call(d3.axisLeft(y));
 
-    // -- Y scale
-    const yScale = d3
-      .scaleLinear()
-      .range([height, 0])
-      .domain([0, d3.max(this.chartData, dataPoint => dataPoint.y)]);
-
-    // const line = d3
-    //   .line<ChartXY>()
-    //     .x(dataPoint => xScale(dataPoint.x))
-    //     .y(dataPoint => yScale(dataPoint.x));
-
-    // Add path
-    // grp
-    //   .append('path')
-    //     .attr('transform', `translate(${margin.left},0)`)
-    //     .datum(this.chartData)
-    //     .attr('fill', 'none')
-    //     .attr('stroke', 'steelblue')
-    //     .attr('stroke-linejoin', 'round')
-    //     .attr('stroke-linecap', 'round')
-    //     .attr('stroke-width', 3)
-    //     .attr('d', line);
-
-    // Add the X Axis
-    chart
-    .append('g')
-      .attr('transform', `translate(0,${height})`)
-    .call(d3.axisBottom(xScale).ticks(this.chartData.length));
-
-    // Add the Y Axis
-    chart
-      .append('g')
-        .attr('transform', `translate(0, 0)`)
-      .call(d3.axisLeft(yScale));
-    }
+    // Add the line
+    svg.append('path')
+      .datum(this.chartData)
+      .attr('fill', 'none')
+      .attr('stroke', 'steelblue')
+      .attr('stroke-width', 1.5)
+      .attr('d', d3.line<ChartXY>()
+        .x((d) => x(d.x))
+        .y((d) => y(d.y))
+      );
+  }
 }
