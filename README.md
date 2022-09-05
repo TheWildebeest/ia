@@ -23,7 +23,7 @@ Make a page, single page app or series of pages that you feel best displays the 
   - Create a store
   - Dispatch a 'Dashboard loaded' event
   - Add an effect to listen to actions of type 'Dashboard loaded' and fetch the dashboard data
-
+  - DataService could then be moved to store and any data processing moved into reducer or done in the effect
 
 ---
 #### **Schema**:
@@ -47,5 +47,5 @@ Make a page, single page app or series of pages that you feel best displays the 
 ---
 ##### **Notes**:
 
-- This is an Angular project — see [official Angular documentation](https://angular.io/) if you are not familiar with Angular.
+- This is an Angular project — see [official Angular documentation](https://angular.io/) for more info.
 
